@@ -41,6 +41,7 @@ def process_pdf(doc, image_filename=None):
     #TEXT REPLACEMENT
     for rep_key, rep_value in REPLACEMENT_DICT.items():
         text_instances = page.searchFor(rep_key)
+        print("Rect", text_instances)
         for inst in text_instances:
                     #Customization ACC to KEY
                     if rep_key == '{number1}':
@@ -52,22 +53,16 @@ def process_pdf(doc, image_filename=None):
                         rect = fitz.Rect(inst.x0-18, inst.y0+2, inst.x1+18, inst.y1+2)
                         text_align = TEXT_ALIGN_CENTER
 
+                    print("aa", rect)
+
                     #Delete text
-                    annot = page.addRedactAnnot(rect)
+                    annot = page.addRedactAnnot(text_instances)
                     # if you want to make sure to keep overlapping images:
                     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE)
-                    page.insert_textbox(rect,rep_value, fontsize=12,
+                    page.insert_textbox(,rep_value, fontsize=12,
                     border_width=1, color=blue,align=text_align)
 
-    # add QR image on top center
-    qr_image_filename = 'centerqr.png'
-    qr_insert_image_path = os.path.join(current_path, 'assets', qr_image_filename)
-
-    # define the position (upper-center)
-    qr_image_rectangle = fitz.Rect(270, 10,340,70)
-    page.insertImage(qr_image_rectangle, filename=qr_insert_image_path)
-
-   # insert background image to the pull page
+   # insert background image to the full page
     full_page_image_path = os.path.join(current_path, 'assets', 'background.png')
     full_img_rect = fitz.Rect(0,0,612,792)
     page.insertImage(full_img_rect, filename=full_page_image_path, overlay=False)
