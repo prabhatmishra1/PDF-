@@ -97,8 +97,7 @@ def process_pdf(doc, images_filename=None, bg_image_filename=None,REPLACEMENT_DI
             # insert background image to the full page
             full_page_image_path = os.path.join(
                 current_path, 'assets', bg_image_filename)
-            full_img_rect = fitz.Rect(0, 0, 612, 792)
-            page.insertImage(full_img_rect,
+            page.insertImage(page.rect,
                             filename=full_page_image_path, overlay=False
                             )
 
